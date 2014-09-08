@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TV Show Premieres</title>
+	<!-- INCLUDE REQUIRED THIRD PARTY LIBRARY JAVASCRIPT AND CSS -->
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+
+	<!-- INCLUDE APPLICATION SPECIFIC CSS AND JAVASCRIPT -->
+	<script type="text/javascript" src="js/tv-premieres-app/app.js"></script>
+	<script type="text/javascript" src="js/tv-premieres-app/controllers/mainController.js"></script>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class='banner'>
+        <div class='container'>
+            <h1>TV SHOW PREMIERES</h1>
+        </div>
+    </div>
+	<div class="container main-frame" ng-app="TVPremieresApp" ng-controller="mainController" ng-init="init()">
+		<div class="search-box row-fluid form-inline">
+			<label>Filter: </label>
+			<input type="text" ng-model="filterText"/>
+			<label>Genre: </label>
+			<select ng-model="genreFilter" ng-options="label for label in availableGenres">
+				<option value="">All</option>
+			</select>
+			<label>Order by: </label>
+			<select ng-model="orderField" ng-options="label for label in orderFields" class="input-medium"></select>
+			<select ng-model="orderReverse"class="input-medium">
+			    <option value="true">Descending</option>
+			    <option value="false">Ascending</option>
+			</select>
+		</div>
+        <div class="results-top"></div>
+        <div class="results-container">
+            <ul class="episode-list">
+            	<li ng-repeat="eachtvshow in results | filter: filterText | isGenre:genreFilter | orderBy:customOrder:orderReverse">
+            		<div class="row-fluid">
+            			<div class="span3">
+            				<img src="{{eachtvshow.episode.images.screen}}" />
+            				<div class="ratings"><strong>Ratings:</strong> <span class="label"><i class="icon-thumbs-up"></i> {{eachtvshow.episode.ratings.loved}}</span> <span class="label"><i class="icon-thumbs-down"></i> {{eachtvshow.episode.ratings.hated}}</span> <span class="label label-important" ng-class="{'label-success': eachtvshow.episode.ratings.percentage >= 50}"><strong>%</strong> {{eachtvshow.episode.ratings.percentage}}</div>
+            			</div>
+            			<div class="span6">
+            				<h3>{{eachtvshow.show.title}}: {{eachtvshow.episode.title}}</h3>
+            				<p>{{eachtvshow.episode.overview}}</p>
+            			</div>
+            			<div class="span3">
+            				<div class="fulldate pull-right label label-info">{{eachtvshow.date}}</div>
+            				<ul class="show-info">
+            					<li><strong>On Air:</strong> {{eachtvshow.show.air_day}} {{eachtvshow.show.air_time}}</li>
+            					<li><strong>Network:</strong> {{eachtvshow.show.network}}</li>
+            					<li><strong>Season #:</strong> {{eachtvshow.episode.season}}</li>
+            					<li><strong>Genres:</strong> <span class="label label-inverse genre" ng-repeat="genre in eachtvshow.show.genres" ng-click="setGenreFilter(genre)">{{genre}}</span>
+            					</li>
+            				</ul>
+            			</div>
+            		</div>
+            	</li>
+            </ul>
+        </div>
+        <div class="results-bottom"></div>
+	</div>
+</body>
+</html>
